@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Web Component: &lt;uni-button-field /> - a web component based on uniopen design language</title>
+<meta name="description" content="uni-button-field is an encapsulated Web Component built upon the foundation of the uniopen design language. Implementation is straightforward: simply slot a standard input element inside uni-button-field. The component instantly applies a user interface that aligns seamlessly with the uniopen design language guidelines. Furthermore, its visual styles can be dynamically adapted via native HTML attributes or JavaScript properties." />
+<script type="module" src="mjs/wc-uni-button-field.js"></script>
+<link rel="stylesheet" href="https://blog.lalacube.com/mei/css/wc-base.css">
+<link rel="stylesheet" href="https://blog.lalacube.com/mei/css/layers/radio-set.css">
+<link rel="stylesheet" href="https://blog.lalacube.com/mei/css/layers/defaults.css">
+<style>
+#hd,#ft{display:none;}
+body{position:relative;inline-size:100vw;block-size:100vh;margin:0;}
+
+.wrap {
+  inline-size: 100%;
+  max-inline-size: min(800px, calc(100% - 2em));
+  box-sizing: border-box;
+}
+
+.demo-wrap {
+  position: relative;
+  inline-size: min(100%, 800px);
+  block-size: 240px;
+  background-color: rgba(224 224 224);
+  margin: 6em auto 1em;
+  box-sizing: border-box;
+  border-radius: 1em;
+  display: grid;
+  place-content: center;
+
+  &+.setting-form {
+    --subject-inline-size: auto;
+    margin-block-start: 1em;
+  }
+}
+
+/* uni-button-field */
+uni-button-field {
+  --icon-scale: .83;
+
+  &:active {
+    scale: .9;
+  }
+
+  /* size */
+  &[size=small] {
+    --icon-scale: .75;
+  }
+
+  &:is([size=medium],[size=large]) {
+    --icon-scale: .83;
+  }
+
+  &:has([slot=button]:is([disabled],[inert])) {
+    em {
+      --icon-color: var(--text-color-disabled);
+    }
+  }
+
+  &:has([slot=button]:focus-visible) {
+    em {
+      --icon-color: var(--text-color-hover);
+    }
+  }
+
+  &:has([slot=button]:active) {
+    em {
+      --icon-color: var(--text-color-active);
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      em {
+        --icon-color: var(--text-color-hover);
+      }
+    }
+  }
+
+  em {
+    --icon-color: var(--text-color-normal);
+
+    inline-size: 24px;
+    aspect-ratio: 1/1;
+    display: block;
+    scale: var(--icon-scale);
+    
+    &::before {
+      content: '';
+      inline-size: 24px;
+      aspect-ratio: 1/1;
+      background-color: var(--icon-color);
+      clip-path: var(--icon);
+      display: block;
+    }
+  }
+
+  .icon-plus {
+    --icon: path('M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z');
+  }
+
+  .icon-arrow {
+    --icon: path('M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z');
+  }
+}
+</style>
+</head>
+
+<body class="flex-center">
+<div class="wrap">
+  <div class="demo-wrap">
+    <uni-button-field appearance="filled" theme="main" size="large">
+      <button
+        slot="button"
+        type="button"
+      >
+        <em class="icon-plus"></em>
+        button
+        <em class="icon-arrow"></em>
+      </button>
+    </uni-button-field>
+  </div>
+
+  <form class="setting-form">
+    <ul class="adjustments">
+      <li class="adjustments__row">
+        <p class="adjustments__row__subject">size：</p>
+        <div class="adjustments__row__content">
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="size-0" type="radio" name="size" value="large" checked />
+              <label class="radio-set__label" for="size-0"></label>
+            </div>
+
+            <label for="size-0">
+              large
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="size-1" type="radio" name="size" value="medium" />
+              <label class="radio-set__label" for="size-1"></label>
+            </div>
+
+            <label for="size-1">
+              medium
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="size-2" type="radio" name="size" value="small" />
+              <label class="radio-set__label" for="size-2"></label>
+            </div>
+
+            <label for="size-2">
+              small
+            </label>
+          </div>
+        </div>
+      </li>
+
+      <li class="adjustments__row">
+        <p class="adjustments__row__subject">appearance：</p>
+        <div class="adjustments__row__content">
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="appearance-0" type="radio" name="appearance" value="filled" checked />
+              <label class="radio-set__label" for="appearance-0"></label>
+            </div>
+
+            <label for="appearance-0">
+              filled
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="appearance-1" type="radio" name="appearance" value="outlined" />
+              <label class="radio-set__label" for="appearance-1"></label>
+            </div>
+
+            <label for="appearance-1">
+              outlined
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="appearance-2" type="radio" name="appearance" value="text" />
+              <label class="radio-set__label" for="appearance-2"></label>
+            </div>
+
+            <label for="appearance-2">
+              text
+            </label>
+          </div>
+        </div>
+      </li>
+
+      <li class="adjustments__row">
+        <p class="adjustments__row__subject">theme：</p>
+        <div class="adjustments__row__content">
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="theme-0" type="radio" name="theme" value="main" checked />
+              <label class="radio-set__label" for="theme-0"></label>
+            </div>
+
+            <label for="theme-0">
+              main
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="theme-1" type="radio" name="theme" value="moderate" />
+              <label class="radio-set__label" for="theme-1"></label>
+            </div>
+
+            <label for="theme-1">
+              moderate
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="theme-2" type="radio" name="theme" value="inverse" />
+              <label class="radio-set__label" for="theme-2"></label>
+            </div>
+
+            <label for="theme-2">
+              inverse
+            </label>
+          </div>
+        </div>
+      </li>
+
+      <li class="adjustments__row">
+        <p class="adjustments__row__subject">disabled：</p>
+        <div class="adjustments__row__content">
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="disabled-0" type="radio" name="disabled" value="y" />
+              <label class="radio-set__label" for="disabled-0"></label>
+            </div>
+
+            <label for="disabled-0">
+              yes
+            </label>
+          </div>
+
+          <div class="il-pair a11y-block-link">
+            <div class="radio-set">
+              <input id="disabled-1" type="radio" name="disabled" value="n" checked />
+              <label class="radio-set__label" for="disabled-1"></label>
+            </div>
+
+            <label for="disabled-1">
+              no
+            </label>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </form>
+</div>
+
+<script type="module">
+await customElements.whenDefined('uni-button-field');
+
+const uniButtonField = document.querySelector('.demo-wrap uni-button-field');
+const button = uniButtonField.querySelector('[slot=button]');
+const form = document.querySelector('.setting-form');
+
+const handler = (evt) => {
+  const { target } = evt;
+  const formData = new FormData(form);
+  const fd = Object.fromEntries(formData.entries());
+
+  switch (target.name) {
+    case 'size': {
+      uniButtonField.size = fd['size'];
+      break;
+    }
+
+    case 'appearance': {
+      uniButtonField.appearance = fd['appearance'];
+      break;
+    }
+
+    case 'theme': {
+      uniButtonField.theme = fd['theme'];
+      break;
+    }
+
+    case 'disabled': {
+      button.disabled = fd['disabled'] === 'y';
+      break;
+    }
+  }
+};
+
+form.addEventListener('input', handler);
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,856 @@
+import { _wcl } from './common-lib.js';
+import { _wccss } from './common-css.js';
+import {
+  colorPalette as _uniColorPalette
+} from 'https://unpkg.com/uni-input-field/mjs/uni-css.js';
+
+const defaults = {
+  appearance: 'filled', // filled, outlined, text
+  size: 'medium', // large, medium, small
+  theme: 'main', // main, moderate, inverse, success, danger
+};
+const booleanAttrs = [];
+const objectAttrs = [];
+const custumEvents = {};
+
+const template = document.createElement('template');
+template.innerHTML = `
+<style>
+${_wccss}
+${_uniColorPalette}
+
+:host{position:relative;inline-size:fit-content;display:block;}
+
+:host([hidden]) {
+  display: none;
+}
+
+/* appearance */
+:host([appearance=filled]) {
+  --appearance: 'filled';
+}
+:host([appearance=outlined]) {
+  --appearance: 'outlined';
+}
+:host([appearance=text]) {
+  --appearance: 'text';
+}
+
+/* theme */
+:host([theme=main]) {
+  --theme: 'main';
+}
+:host([theme=moderate]) {
+  --theme: 'moderate';
+}
+:host([theme=inverse]) {
+  --theme: 'inverse';
+}
+:host([theme=success]) {
+  --theme: 'success';
+}
+:host([theme=danger]) {
+  --theme: 'danger';
+}
+
+/* size */
+:host([size=large]) {
+  .main {
+    --button-block-size: var(--large-block-size);
+    --button-min-inline-size: var(--large-min-inline-size);
+    --button-font-size: var(--large-font-size);
+    --button-padding: var(--large-padding);
+  }
+}
+
+:host([size=medium]) {
+  .main {
+    --button-block-size: var(--medium-block-size);
+    --button-min-inline-size: var(--medium-min-inline-size);
+    --button-font-size: var(--medium-font-size);
+    --button-padding: var(--medium-padding);
+  }
+}
+
+:host([size=small]) {
+  .main {
+    --button-block-size: var(--small-block-size);
+    --button-min-inline-size: var(--small-min-inline-size);
+    --button-font-size: var(--small-font-size);
+    --button-padding: var(--small-padding);
+  }
+}
+
+.main {
+  --ON: initial;
+  --OFF: ;
+
+  /* filled > main */
+  --text-color-filled-main-normal: var(--uni-button-field-text-color-filled-main-normal, var(--ct_text_inverse_general));
+  --text-color-filled-main-disabled: var(--uni-button-field-text-color-filled-main-disabled, var(--ct_text_inverse_general));
+  --text-color-filled-main-hover: var(--uni-button-field-text-color-filled-main-hover, var(--ct_text_inverse_general));
+  --text-color-filled-main-active: var(--uni-button-field-text-color-filled-main-active, var(--ct_text_inverse_general));
+  --border-color-filled-main-normal: var(--uni-button-field-border-color-filled-main-normal, transparent);
+  --border-color-filled-main-disabled: var(--uni-button-field-border-color-filled-main-disabled, transparent);
+  --border-color-filled-main-hover: var(--uni-button-field-border-color-filled-main-hover, transparent);
+  --border-color-filled-main-active: var(--uni-button-field-border-color-filled-main-active, transparent);
+  --background-color-filled-main-normal: var(--uni-button-field-background-color-filled-main-normal, var(--ct_button-filled_main_enabled));
+  --background-color-filled-main-disabled: var(--uni-button-field-background-color-filled-main-disabled, var(--ct_button-filled_main_disabled));
+  --background-color-filled-main-hover: var(--uni-button-field-background-color-filled-main-hover, var(--ct_button-filled_main_hover));
+  --background-color-filled-main-active: var(--uni-button-field-background-color-filled-main-active, var(--ct_button-filled_main_active));
+
+  /* filled > moderate */
+  --text-color-filled-moderate-normal: var(--uni-button-field-text-color-filled-moderate-normal, var(--ct_text_inverse_general));
+  --text-color-filled-moderate-disabled: var(--uni-button-field-text-color-filled-moderate-disabled, var(--ct_text_inverse_general));
+  --text-color-filled-moderate-hover: var(--uni-button-field-text-color-filled-moderate-hover, var(--ct_text_inverse_general));
+  --text-color-filled-moderate-active: var(--uni-button-field-text-color-filled-moderate-active, var(--ct_text_inverse_general));
+  --border-color-filled-moderate-normal: var(--uni-button-field-border-color-filled-moderate-normal, transparent);
+  --border-color-filled-moderate-disabled: var(--uni-button-field-border-color-filled-moderate-disabled, transparent);
+  --border-color-filled-moderate-hover: var(--uni-button-field-border-color-filled-moderate-hover, transparent);
+  --border-color-filled-moderate-active: var(--uni-button-field-border-color-filled-moderate-active, transparent);
+  --background-color-filled-moderate-normal: var(--uni-button-field-background-color-filled-moderate-normal, var(--ct_button-filled_moderate_enabled));
+  --background-color-filled-moderate-disabled: var(--uni-button-field-background-color-filled-moderate-disabled, var(--ct_button-filled_moderate_disabled));
+  --background-color-filled-moderate-hover: var(--uni-button-field-background-color-filled-moderate-hover, var(--ct_button-filled_moderate_hover));
+  --background-color-filled-moderate-active: var(--uni-button-field-background-color-filled-moderate-active, var(--ct_button-filled_moderate_active));
+
+  /* filled > inverse */
+  --text-color-filled-inverse-normal: var(--uni-button-field-text-color-filled-inverse-normal, var(--ct_text_main_general));
+  --text-color-filled-inverse-disabled: var(--uni-button-field-text-color-filled-inverse-disabled, var(--ct_text_main_general));
+  --text-color-filled-inverse-hover: var(--uni-button-field-text-color-filled-inverse-hover, var(--ct_text_main_general));
+  --text-color-filled-inverse-active: var(--uni-button-field-text-color-filled-inverse-active, var(--ct_text_main_general));
+  --border-color-filled-inverse-normal: var(--uni-button-field-border-color-filled-inverse-normal, transparent);
+  --border-color-filled-inverse-disabled: var(--uni-button-field-border-color-filled-inverse-disabled, transparent);
+  --border-color-filled-inverse-hover: var(--uni-button-field-border-color-filled-inverse-hover, transparent);
+  --border-color-filled-inverse-active: var(--uni-button-field-border-color-filled-inverse-active, transparent);
+  --background-color-filled-inverse-normal: var(--uni-button-field-background-color-filled-inverse-normal, var(--ct_button-filled_inverse_enabled));
+  --background-color-filled-inverse-disabled: var(--uni-button-field-background-color-filled-inverse-disabled, var(--ct_button-filled_inverse_disabled));
+  --background-color-filled-inverse-hover: var(--uni-button-field-background-color-filled-inverse-hover, var(--ct_button-filled_inverse_hover));
+  --background-color-filled-inverse-active: var(--uni-button-field-background-color-filled-inverse-active, var(--ct_button-filled_inverse_active));
+
+  /* filled > success */
+  --text-color-filled-success-normal: var(--uni-button-field-text-color-filled-success-normal, var(--ct_text_inverse_general));
+  --text-color-filled-success-disabled: var(--uni-button-field-text-color-filled-success-disabled, var(--ct_text_inverse_general));
+  --text-color-filled-success-hover: var(--uni-button-field-text-color-filled-success-hover, var(--ct_text_inverse_general));
+  --text-color-filled-success-active: var(--uni-button-field-text-color-filled-success-active, var(--ct_text_inverse_general));
+  --border-color-filled-success-normal: var(--uni-button-field-border-color-filled-success-normal, transparent);
+  --border-color-filled-success-disabled: var(--uni-button-field-border-color-filled-success-disabled, transparent);
+  --border-color-filled-success-hover: var(--uni-button-field-border-color-filled-success-hover, transparent);
+  --border-color-filled-success-active: var(--uni-button-field-border-color-filled-success-active, transparent);
+  --background-color-filled-success-normal: var(--uni-button-field-background-color-filled-success-normal, var(--ct_button-filled_main_enabled));
+  --background-color-filled-success-disabled: var(--uni-button-field-background-color-filled-success-disabled, var(--ct_button-filled_main_disabled));
+  --background-color-filled-success-hover: var(--uni-button-field-background-color-filled-success-hover, var(--ct_button-filled_main_hover));
+  --background-color-filled-success-active: var(--uni-button-field-background-color-filled-success-active, var(--ct_button-filled_main_active));
+
+  /* filled > danger */
+  --text-color-filled-danger-normal: var(--uni-button-field-text-color-filled-danger-normal, var(--ct_text_inverse_general));
+  --text-color-filled-danger-disabled: var(--uni-button-field-text-color-filled-danger-disabled, var(--ct_text_inverse_general));
+  --text-color-filled-danger-hover: var(--uni-button-field-text-color-filled-danger-hover, var(--ct_text_inverse_general));
+  --text-color-filled-danger-active: var(--uni-button-field-text-color-filled-danger-active, var(--ct_text_inverse_general));
+  --border-color-filled-danger-normal: var(--uni-button-field-border-color-filled-danger-normal, transparent);
+  --border-color-filled-danger-disabled: var(--uni-button-field-border-color-filled-danger-disabled, transparent);
+  --border-color-filled-danger-hover: var(--uni-button-field-border-color-filled-danger-hover, transparent);
+  --border-color-filled-danger-active: var(--uni-button-field-border-color-filled-danger-active, transparent);
+  --background-color-filled-danger-normal: var(--uni-button-field-background-color-filled-danger-normal, var(--ct_button-filled_main_enabled));
+  --background-color-filled-danger-disabled: var(--uni-button-field-background-color-filled-danger-disabled, var(--ct_button-filled_main_disabled));
+  --background-color-filled-danger-hover: var(--uni-button-field-background-color-filled-danger-hover, var(--ct_button-filled_main_hover));
+  --background-color-filled-danger-active: var(--uni-button-field-background-color-filled-danger-active, var(--ct_button-filled_main_active));
+
+  /* outlined > main */
+  --text-color-outlined-main-normal: var(--uni-button-field-text-color-outlined-main-normal, var(--ct_text_main_general));
+  --text-color-outlined-main-disabled: var(--uni-button-field-text-color-outlined-main-disabled, var(--ct_text_main_general));
+  --text-color-outlined-main-hover: var(--uni-button-field-text-color-outlined-main-hover, var(--ct_text_main_general));
+  --text-color-outlined-main-active: var(--uni-button-field-text-color-outlined-main-active, var(--ct_text_main_general));
+  --border-color-outlined-main-normal: var(--uni-button-field-border-color-outlined-main-normal, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-main-disabled: var(--uni-button-field-border-color-outlined-main-disabled, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-main-hover: var(--uni-button-field-border-color-outlined-main-hover, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-main-active: var(--uni-button-field-border-color-outlined-main-active, var(--ct_button-outlined_main_stroke));
+  --background-color-outlined-main-normal: var(--uni-button-field-background-color-outlined-main-normal, transparent);
+  --background-color-outlined-main-disabled: var(--uni-button-field-background-color-outlined-main-disabled, transparent);
+  --background-color-outlined-main-hover: var(--uni-button-field-background-color-outlined-main-hover, var(--ct_button-outlined_main_container_hover));
+  --background-color-outlined-main-active: var(--uni-button-field-background-color-outlined-main-active, var(--ct_button-outlined_main_container_active));
+
+  /* outlined > moderate */
+  --text-color-outlined-moderate-normal: var(--uni-button-field-text-color-outlined-moderate-normal, var(--ct_text_moderate_general));
+  --text-color-outlined-moderate-disabled: var(--uni-button-field-text-color-outlined-moderate-disabled, var(--ct_text_moderate_general));
+  --text-color-outlined-moderate-hover: var(--uni-button-field-text-color-outlined-moderate-hover, var(--ct_text_moderate_general));
+  --text-color-outlined-moderate-active: var(--uni-button-field-text-color-outlined-moderate-active, var(--ct_text_moderate_general));
+  --border-color-outlined-moderate-normal: var(--uni-button-field-border-color-outlined-moderate-normal, var(--ct_button-outlined_moderate_stroke));
+  --border-color-outlined-moderate-disabled: var(--uni-button-field-border-color-outlined-moderate-disabled, var(--ct_button-outlined_moderate_stroke));
+  --border-color-outlined-moderate-hover: var(--uni-button-field-border-color-outlined-moderate-hover, var(--ct_button-outlined_moderate_stroke));
+  --border-color-outlined-moderate-active: var(--uni-button-field-border-color-outlined-moderate-active, var(--ct_button-outlined_moderate_stroke));
+  --background-color-outlined-moderate-normal: var(--uni-button-field-background-color-outlined-moderate-normal, transparent);
+  --background-color-outlined-moderate-disabled: var(--uni-button-field-background-color-outlined-moderate-disabled, transparent);
+  --background-color-outlined-moderate-hover: var(--uni-button-field-background-color-outlined-moderate-hover, var(--ct_button-outlined_main_container_hover));
+  --background-color-outlined-moderate-active: var(--uni-button-field-background-color-outlined-moderate-active, var(--ct_button-outlined_main_container_active));
+
+  /* outlined > inverse */
+  --text-color-outlined-inverse-normal: var(--uni-button-field-text-color-outlined-inverse-normal, var(--ct_text_inverse_general));
+  --text-color-outlined-inverse-disabled: var(--uni-button-field-text-color-outlined-inverse-disabled, var(--ct_text_inverse_general));
+  --text-color-outlined-inverse-hover: var(--uni-button-field-text-color-outlined-inverse-hover, var(--ct_text_inverse_general));
+  --text-color-outlined-inverse-active: var(--uni-button-field-text-color-outlined-inverse-active, var(--ct_text_inverse_general));
+  --border-color-outlined-inverse-normal: var(--uni-button-field-border-color-outlined-inverse-normal, var(--ct_button-outlined_inverse_stroke));
+  --border-color-outlined-inverse-disabled: var(--uni-button-field-border-color-outlined-inverse-disabled, var(--ct_button-outlined_inverse_stroke));
+  --border-color-outlined-inverse-hover: var(--uni-button-field-border-color-outlined-inverse-hover, var(--ct_button-outlined_inverse_stroke));
+  --border-color-outlined-inverse-active: var(--uni-button-field-border-color-outlined-inverse-active, var(--ct_button-outlined_inverse_stroke));
+  --background-color-outlined-inverse-normal: var(--uni-button-field-background-color-outlined-inverse-normal, transparent);
+  --background-color-outlined-inverse-disabled: var(--uni-button-field-background-color-outlined-inverse-disabled, transparent);
+  --background-color-outlined-inverse-hover: var(--uni-button-field-background-color-outlined-inverse-hover, var(--ct_button-outlined_inverse_container_hover));
+  --background-color-outlined-inverse-active: var(--uni-button-field-background-color-outlined-inverse-active, var(--ct_button-outlined_inverse_container_active));
+
+  /* outlined > success */
+  --text-color-outlined-success-normal: var(--uni-button-field-text-color-outlined-success-normal, var(--ct_text_main_general));
+  --text-color-outlined-success-disabled: var(--uni-button-field-text-color-outlined-success-disabled, var(--ct_text_main_general));
+  --text-color-outlined-success-hover: var(--uni-button-field-text-color-outlined-success-hover, var(--ct_text_main_general));
+  --text-color-outlined-success-active: var(--uni-button-field-text-color-outlined-success-active, var(--ct_text_main_general));
+  --border-color-outlined-success-normal: var(--uni-button-field-border-color-outlined-success-normal, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-success-disabled: var(--uni-button-field-border-color-outlined-success-disabled, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-success-hover: var(--uni-button-field-border-color-outlined-success-hover, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-success-active: var(--uni-button-field-border-color-outlined-success-active, var(--ct_button-outlined_main_stroke));
+  --background-color-outlined-success-normal: var(--uni-button-field-background-color-outlined-success-normal, transparent);
+  --background-color-outlined-success-disabled: var(--uni-button-field-background-color-outlined-success-disabled, transparent);
+  --background-color-outlined-success-hover: var(--uni-button-field-background-color-outlined-success-hover, var(--ct_button-outlined_main_container_hover));
+  --background-color-outlined-success-active: var(--uni-button-field-background-color-outlined-success-active, var(--ct_button-outlined_main_container_active));
+
+  /* outlined > danger */
+  --text-color-outlined-danger-normal: var(--uni-button-field-text-color-outlined-danger-normal, var(--ct_text_main_general));
+  --text-color-outlined-danger-disabled: var(--uni-button-field-text-color-outlined-danger-disabled, var(--ct_text_main_general));
+  --text-color-outlined-danger-hover: var(--uni-button-field-text-color-outlined-danger-hover, var(--ct_text_main_general));
+  --text-color-outlined-danger-active: var(--uni-button-field-text-color-outlined-danger-active, var(--ct_text_main_general));
+  --border-color-outlined-danger-normal: var(--uni-button-field-border-color-outlined-danger-normal, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-danger-disabled: var(--uni-button-field-border-color-outlined-danger-disabled, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-danger-hover: var(--uni-button-field-border-color-outlined-danger-hover, var(--ct_button-outlined_main_stroke));
+  --border-color-outlined-danger-active: var(--uni-button-field-border-color-outlined-danger-active, var(--ct_button-outlined_main_stroke));
+  --background-color-outlined-danger-normal: var(--uni-button-field-background-color-outlined-danger-normal, transparent);
+  --background-color-outlined-danger-disabled: var(--uni-button-field-background-color-outlined-danger-disabled, transparent);
+  --background-color-outlined-danger-hover: var(--uni-button-field-background-color-outlined-danger-hover, var(--ct_button-outlined_main_container_hover));
+  --background-color-outlined-danger-active: var(--uni-button-field-background-color-outlined-danger-active, var(--ct_button-outlined_main_container_active));
+
+  /* text > main */
+  --text-color-text-main-normal: var(--uni-button-field-text-color-text-main-normal, var(--ct_text_main_general));
+  --text-color-text-main-disabled: var(--uni-button-field-text-color-text-main-disabled, var(--ct_text_main_general));
+  --text-color-text-main-hover: var(--uni-button-field-text-color-text-main-hover, var(--ct_text_main_subtle));
+  --text-color-text-main-active: var(--uni-button-field-text-color-text-main-active, var(--ct_text_main_subtle));
+  --border-color-text-main-normal: var(--uni-button-field-border-color-text-main-normal, transparent);
+  --border-color-text-main-disabled: var(--uni-button-field-border-color-text-main-disabled, transparent);
+  --border-color-text-main-hover: var(--uni-button-field-border-color-text-main-hover, transparent);
+  --border-color-text-main-active: var(--uni-button-field-border-color-text-main-active, transparent);
+  --background-color-text-main-normal: var(--uni-button-field-background-color-text-main-normal, transparent);
+  --background-color-text-main-disabled: var(--uni-button-field-background-color-text-main-disabled, transparent);
+  --background-color-text-main-hover: var(--uni-button-field-background-color-text-main-hover, transparent);
+  --background-color-text-main-active: var(--uni-button-field-background-color-text-main-active, transparent);
+
+  /* text > moderate */
+  --text-color-text-moderate-normal: var(--uni-button-field-text-color-text-moderate-normal, var(--ct_text_moderate_general));
+  --text-color-text-moderate-disabled: var(--uni-button-field-text-color-text-moderate-disabled, var(--ct_text_moderate_general));
+  --text-color-text-moderate-hover: var(--uni-button-field-text-color-text-moderate-hover, var(--ct_text_moderate_subtle));
+  --text-color-text-moderate-active: var(--uni-button-field-text-color-text-moderate-active, var(--ct_text_moderate_subtle));
+  --border-color-text-moderate-normal: var(--uni-button-field-border-color-text-moderate-normal, transparent);
+  --border-color-text-moderate-disabled: var(--uni-button-field-border-color-text-moderate-disabled, transparent);
+  --border-color-text-moderate-hover: var(--uni-button-field-border-color-text-moderate-hover, transparent);
+  --border-color-text-moderate-active: var(--uni-button-field-border-color-text-moderate-active, transparent);
+  --background-color-text-moderate-normal: var(--uni-button-field-background-color-text-moderate-normal, transparent);
+  --background-color-text-moderate-disabled: var(--uni-button-field-background-color-text-moderate-disabled, transparent);
+  --background-color-text-moderate-hover: var(--uni-button-field-background-color-text-moderate-hover, transparent);
+  --background-color-text-moderate-active: var(--uni-button-field-background-color-text-moderate-active, transparent);
+
+  /* text > inverse */
+  --text-color-text-inverse-normal: var(--uni-button-field-text-color-text-inverse-normal, var(--ct_text_inverse_general));
+  --text-color-text-inverse-disabled: var(--uni-button-field-text-color-text-inverse-disabled, var(--ct_text_inverse_general));
+  --text-color-text-inverse-hover: var(--uni-button-field-text-color-text-inverse-hover, var(--ct_icon_inverse_subtle));
+  --text-color-text-inverse-active: var(--uni-button-field-text-color-text-inverse-active, var(--ct_icon_inverse_subtle));
+  --border-color-text-inverse-normal: var(--uni-button-field-border-color-text-inverse-normal, transparent);
+  --border-color-text-inverse-disabled: var(--uni-button-field-border-color-text-inverse-disabled, transparent);
+  --border-color-text-inverse-hover: var(--uni-button-field-border-color-text-inverse-hover, transparent);
+  --border-color-text-inverse-active: var(--uni-button-field-border-color-text-inverse-active, transparent);
+  --background-color-text-inverse-normal: var(--uni-button-field-background-color-text-inverse-normal, transparent);
+  --background-color-text-inverse-disabled: var(--uni-button-field-background-color-text-inverse-disabled, transparent);
+  --background-color-text-inverse-hover: var(--uni-button-field-background-color-text-inverse-hover, transparent);
+  --background-color-text-inverse-active: var(--uni-button-field-background-color-text-inverse-active, transparent);
+
+  /* text > success */
+  --text-color-text-success-normal: var(--uni-button-field-text-color-text-success-normal, var(--ct_text_success_general));
+  --text-color-text-success-disabled: var(--uni-button-field-text-color-text-success-disabled, var(--ct_text_success_general));
+  --text-color-text-success-hover: var(--uni-button-field-text-color-text-success-hover, var(--ct_text_success_subtle));
+  --text-color-text-success-active: var(--uni-button-field-text-color-text-success-active, var(--ct_text_success_subtle));
+  --border-color-text-success-normal: var(--uni-button-field-border-color-text-success-normal, transparent);
+  --border-color-text-success-disabled: var(--uni-button-field-border-color-text-success-disabled, transparent);
+  --border-color-text-success-hover: var(--uni-button-field-border-color-text-success-hover, transparent);
+  --border-color-text-success-active: var(--uni-button-field-border-color-text-success-active, transparent);
+  --background-color-text-success-normal: var(--uni-button-field-background-color-text-success-normal, transparent);
+  --background-color-text-success-disabled: var(--uni-button-field-background-color-text-success-disabled, transparent);
+  --background-color-text-success-hover: var(--uni-button-field-background-color-text-success-hover, transparent);
+  --background-color-text-success-active: var(--uni-button-field-background-color-text-success-active, transparent);
+
+  /* text > danger */
+  --text-color-text-danger-normal: var(--uni-button-field-text-color-text-danger-normal, var(--ct_text_danger_general));
+  --text-color-text-danger-disabled: var(--uni-button-field-text-color-text-danger-disabled, var(--ct_text_danger_general));
+  --text-color-text-danger-hover: var(--uni-button-field-text-color-text-danger-hover, var(--ct_text_danger_subtle));
+  --text-color-text-danger-active: var(--uni-button-field-text-color-text-danger-active, var(--ct_text_danger_subtle));
+  --border-color-text-danger-normal: var(--uni-button-field-border-color-text-danger-normal, transparent);
+  --border-color-text-danger-disabled: var(--uni-button-field-border-color-text-danger-disabled, transparent);
+  --border-color-text-danger-hover: var(--uni-button-field-border-color-text-danger-hover, transparent);
+  --border-color-text-danger-active: var(--uni-button-field-border-color-text-danger-active, transparent);
+  --background-color-text-danger-normal: var(--uni-button-field-background-color-text-danger-normal, transparent);
+  --background-color-text-danger-disabled: var(--uni-button-field-background-color-text-danger-disabled, transparent);
+  --background-color-text-danger-hover: var(--uni-button-field-background-color-text-danger-hover, transparent);
+  --background-color-text-danger-active: var(--uni-button-field-background-color-text-danger-active, transparent);
+
+  /* placeholder */
+  --text-color-normal: var(--text-color-filled-main-normal);
+  --text-color-disabled: var(--text-color-filled-main-disabled);
+  --text-color-hover: var(--text-color-filled-main-hover);
+  --text-color-active: var(--text-color-filled-main-active);
+
+  --border-color-normal: var(--border-color-filled-main-normal);
+  --border-color-disabled: var(--border-color-filled-main-disabled);
+  --border-color-hover: var(--border-color-filled-main-hover);
+  --border-color-active: var(--border-color-filled-main-active);
+
+  --background-color-normal: var(--background-color-filled-main-normal);
+  --background-color-disabled: var(--background-color-filled-main-disabled);
+  --background-color-hover: var(--background-color-filled-main-hover);
+  --background-color-active: var(--background-color-filled-main-active);
+
+  @container style(--appearance: 'filled') {
+    @container style(--theme: 'main') {
+      --text-color-normal: var(--text-color-filled-main-normal);
+      --text-color-disabled: var(--text-color-filled-main-disabled);
+      --text-color-hover: var(--text-color-filled-main-hover);
+      --text-color-active: var(--text-color-filled-main-active);
+      --border-color-normal: var(--border-color-filled-main-normal);
+      --border-color-disabled: var(--border-color-filled-main-disabled);
+      --border-color-hover: var(--border-color-filled-main-hover);
+      --border-color-active: var(--border-color-filled-main-active);
+      --background-color-normal: var(--background-color-filled-main-normal);
+      --background-color-disabled: var(--background-color-filled-main-disabled);
+      --background-color-hover: var(--background-color-filled-main-hover);
+      --background-color-active: var(--background-color-filled-main-active);
+    }
+
+    @container style(--theme: 'moderate') {
+      --text-color-normal: var(--text-color-filled-moderate-normal);
+      --text-color-disabled: var(--text-color-filled-moderate-disabled);
+      --text-color-hover: var(--text-color-filled-moderate-hover);
+      --text-color-active: var(--text-color-filled-moderate-active);
+      --border-color-normal: var(--border-color-filled-moderate-normal);
+      --border-color-disabled: var(--border-color-filled-moderate-disabled);
+      --border-color-hover: var(--border-color-filled-moderate-hover);
+      --border-color-active: var(--border-color-filled-moderate-active);
+      --background-color-normal: var(--background-color-filled-moderate-normal);
+      --background-color-disabled: var(--background-color-filled-moderate-disabled);
+      --background-color-hover: var(--background-color-filled-moderate-hover);
+      --background-color-active: var(--background-color-filled-moderate-active);
+    }
+
+    @container style(--theme: 'inverse') {
+      --text-color-normal: var(--text-color-filled-inverse-normal);
+      --text-color-disabled: var(--text-color-filled-inverse-disabled);
+      --text-color-hover: var(--text-color-filled-inverse-hover);
+      --text-color-active: var(--text-color-filled-inverse-active);
+      --border-color-normal: var(--border-color-filled-inverse-normal);
+      --border-color-disabled: var(--border-color-filled-inverse-disabled);
+      --border-color-hover: var(--border-color-filled-inverse-hover);
+      --border-color-active: var(--border-color-filled-inverse-active);
+      --background-color-normal: var(--background-color-filled-inverse-normal);
+      --background-color-disabled: var(--background-color-filled-inverse-disabled);
+      --background-color-hover: var(--background-color-filled-inverse-hover);
+      --background-color-active: var(--background-color-filled-inverse-active);
+    }
+
+    @container style(--theme: 'success') {
+      --text-color-normal: var(--text-color-filled-succcess-normal);
+      --text-color-disabled: var(--text-color-filled-succcess-disabled);
+      --text-color-hover: var(--text-color-filled-succcess-hover);
+      --text-color-active: var(--text-color-filled-succcess-active);
+      --border-color-normal: var(--border-color-filled-succcess-normal);
+      --border-color-disabled: var(--border-color-filled-succcess-disabled);
+      --border-color-hover: var(--border-color-filled-succcess-hover);
+      --border-color-active: var(--border-color-filled-succcess-active);
+      --background-color-normal: var(--background-color-filled-succcess-normal);
+      --background-color-disabled: var(--background-color-filled-succcess-disabled);
+      --background-color-hover: var(--background-color-filled-succcess-hover);
+      --background-color-active: var(--background-color-filled-succcess-active);
+    }
+
+    @container style(--theme: 'danger') {
+      --text-color-normal: var(--text-color-filled-danger-normal);
+      --text-color-disabled: var(--text-color-filled-danger-disabled);
+      --text-color-hover: var(--text-color-filled-danger-hover);
+      --text-color-active: var(--text-color-filled-danger-active);
+      --border-color-normal: var(--border-color-filled-danger-normal);
+      --border-color-disabled: var(--border-color-filled-danger-disabled);
+      --border-color-hover: var(--border-color-filled-danger-hover);
+      --border-color-active: var(--border-color-filled-danger-active);
+      --background-color-normal: var(--background-color-filled-danger-normal);
+      --background-color-disabled: var(--background-color-filled-danger-disabled);
+      --background-color-hover: var(--background-color-filled-danger-hover);
+      --background-color-active: var(--background-color-filled-danger-active);
+    }
+  }
+
+  @container style(--appearance: 'outlined') {
+    @container style(--theme: 'main') {
+      --text-color-normal: var(--text-color-outlined-main-normal);
+      --text-color-disabled: var(--text-color-outlined-main-disabled);
+      --text-color-hover: var(--text-color-outlined-main-hover);
+      --text-color-active: var(--text-color-outlined-main-active);
+      --border-color-normal: var(--border-color-outlined-main-normal);
+      --border-color-disabled: var(--border-color-outlined-main-disabled);
+      --border-color-hover: var(--border-color-outlined-main-hover);
+      --border-color-active: var(--border-color-outlined-main-active);
+      --background-color-normal: var(--background-color-outlined-main-normal);
+      --background-color-disabled: var(--background-color-outlined-main-disabled);
+      --background-color-hover: var(--background-color-outlined-main-hover);
+      --background-color-active: var(--background-color-outlined-main-active);
+    }
+
+    @container style(--theme: 'moderate') {
+      --text-color-normal: var(--text-color-outlined-moderate-normal);
+      --text-color-disabled: var(--text-color-outlined-moderate-disabled);
+      --text-color-hover: var(--text-color-outlined-moderate-hover);
+      --text-color-active: var(--text-color-outlined-moderate-active);
+      --border-color-normal: var(--border-color-outlined-moderate-normal);
+      --border-color-disabled: var(--border-color-outlined-moderate-disabled);
+      --border-color-hover: var(--border-color-outlined-moderate-hover);
+      --border-color-active: var(--border-color-outlined-moderate-active);
+      --background-color-normal: var(--background-color-outlined-moderate-normal);
+      --background-color-disabled: var(--background-color-outlined-moderate-disabled);
+      --background-color-hover: var(--background-color-outlined-moderate-hover);
+      --background-color-active: var(--background-color-outlined-moderate-active);
+    }
+
+    @container style(--theme: 'inverse') {
+      --text-color-normal: var(--text-color-outlined-inverse-normal);
+      --text-color-disabled: var(--text-color-outlined-inverse-disabled);
+      --text-color-hover: var(--text-color-outlined-inverse-hover);
+      --text-color-active: var(--text-color-outlined-inverse-active);
+      --border-color-normal: var(--border-color-outlined-inverse-normal);
+      --border-color-disabled: var(--border-color-outlined-inverse-disabled);
+      --border-color-hover: var(--border-color-outlined-inverse-hover);
+      --border-color-active: var(--border-color-outlined-inverse-active);
+      --background-color-normal: var(--background-color-outlined-inverse-normal);
+      --background-color-disabled: var(--background-color-outlined-inverse-disabled);
+      --background-color-hover: var(--background-color-outlined-inverse-hover);
+      --background-color-active: var(--background-color-outlined-inverse-active);
+    }
+
+    @container style(--theme: 'success') {
+      --text-color-normal: var(--text-color-outlined-success-normal);
+      --text-color-disabled: var(--text-color-outlined-success-disabled);
+      --text-color-hover: var(--text-color-outlined-success-hover);
+      --text-color-active: var(--text-color-outlined-success-active);
+      --border-color-normal: var(--border-color-outlined-success-normal);
+      --border-color-disabled: var(--border-color-outlined-success-disabled);
+      --border-color-hover: var(--border-color-outlined-success-hover);
+      --border-color-active: var(--border-color-outlined-success-active);
+      --background-color-normal: var(--background-color-outlined-success-normal);
+      --background-color-disabled: var(--background-color-outlined-success-disabled);
+      --background-color-hover: var(--background-color-outlined-success-hover);
+      --background-color-active: var(--background-color-outlined-success-active);
+    }
+
+    @container style(--theme: 'danger') {
+      --text-color-normal: var(--text-color-outlined-danger-normal);
+      --text-color-disabled: var(--text-color-outlined-danger-disabled);
+      --text-color-hover: var(--text-color-outlined-danger-hover);
+      --text-color-active: var(--text-color-outlined-danger-active);
+      --border-color-normal: var(--border-color-outlined-danger-normal);
+      --border-color-disabled: var(--border-color-outlined-danger-disabled);
+      --border-color-hover: var(--border-color-outlined-danger-hover);
+      --border-color-active: var(--border-color-outlined-danger-active);
+      --background-color-normal: var(--background-color-outlined-danger-normal);
+      --background-color-disabled: var(--background-color-outlined-danger-disabled);
+      --background-color-hover: var(--background-color-outlined-danger-hover);
+      --background-color-active: var(--background-color-outlined-danger-active);
+    }
+  }
+
+  @container style(--appearance: 'text') {
+    @container style(--theme: 'main') {
+      --text-color-normal: var(--text-color-text-main-normal);
+      --text-color-disabled: var(--text-color-text-main-disabled);
+      --text-color-hover: var(--text-color-text-main-hover);
+      --text-color-active: var(--text-color-text-main-active);
+      --border-color-normal: var(--border-color-text-main-normal);
+      --border-color-disabled: var(--border-color-text-main-disabled);
+      --border-color-hover: var(--border-color-text-main-hover);
+      --border-color-active: var(--border-color-text-main-active);
+      --background-color-normal: var(--background-color-text-main-normal);
+      --background-color-disabled: var(--background-color-text-main-disabled);
+      --background-color-hover: var(--background-color-text-main-hover);
+      --background-color-active: var(--background-color-text-main-active);
+    }
+
+    @container style(--theme: 'moderate') {
+      --text-color-normal: var(--text-color-text-moderate-normal);
+      --text-color-disabled: var(--text-color-text-moderate-disabled);
+      --text-color-hover: var(--text-color-text-moderate-hover);
+      --text-color-active: var(--text-color-text-moderate-active);
+      --border-color-normal: var(--border-color-text-moderate-normal);
+      --border-color-disabled: var(--border-color-text-moderate-disabled);
+      --border-color-hover: var(--border-color-text-moderate-hover);
+      --border-color-active: var(--border-color-text-moderate-active);
+      --background-color-normal: var(--background-color-text-moderate-normal);
+      --background-color-disabled: var(--background-color-text-moderate-disabled);
+      --background-color-hover: var(--background-color-text-moderate-hover);
+      --background-color-active: var(--background-color-text-moderate-active);
+    }
+
+    @container style(--theme: 'inverse') {
+      --text-color-normal: var(--text-color-text-inverse-normal);
+      --text-color-disabled: var(--text-color-text-inverse-disabled);
+      --text-color-hover: var(--text-color-text-inverse-hover);
+      --text-color-active: var(--text-color-text-inverse-active);
+      --border-color-normal: var(--border-color-text-inverse-normal);
+      --border-color-disabled: var(--border-color-text-inverse-disabled);
+      --border-color-hover: var(--border-color-text-inverse-hover);
+      --border-color-active: var(--border-color-text-inverse-active);
+      --background-color-normal: var(--background-color-text-inverse-normal);
+      --background-color-disabled: var(--background-color-text-inverse-disabled);
+      --background-color-hover: var(--background-color-text-inverse-hover);
+      --background-color-active: var(--background-color-text-inverse-active);
+    }
+
+    @container style(--theme: 'success') {
+      --text-color-normal: var(--text-color-text-success-normal);
+      --text-color-disabled: var(--text-color-text-success-disabled);
+      --text-color-hover: var(--text-color-text-success-hover);
+      --text-color-active: var(--text-color-text-success-active);
+      --border-color-normal: var(--border-color-text-success-normal);
+      --border-color-disabled: var(--border-color-text-success-disabled);
+      --border-color-hover: var(--border-color-text-success-hover);
+      --border-color-active: var(--border-color-text-success-active);
+      --background-color-normal: var(--background-color-text-success-normal);
+      --background-color-disabled: var(--background-color-text-success-disabled);
+      --background-color-hover: var(--background-color-text-success-hover);
+      --background-color-active: var(--background-color-text-success-active);
+    }
+
+    @container style(--theme: 'danger') {
+      --text-color-normal: var(--text-color-text-danger-normal);
+      --text-color-disabled: var(--text-color-text-danger-disabled);
+      --text-color-hover: var(--text-color-text-danger-hover);
+      --text-color-active: var(--text-color-text-danger-active);
+      --border-color-normal: var(--border-color-text-danger-normal);
+      --border-color-disabled: var(--border-color-text-danger-disabled);
+      --border-color-hover: var(--border-color-text-danger-hover);
+      --border-color-active: var(--border-color-text-danger-active);
+      --background-color-normal: var(--background-color-text-danger-normal);
+      --background-color-disabled: var(--background-color-text-danger-disabled);
+      --background-color-hover: var(--background-color-text-danger-hover);
+      --background-color-active: var(--background-color-text-danger-active);
+    }
+  }
+
+  /* size */
+  --large-block-size: 44px;
+  --large-min-inline-size: 68px;
+  --large-font-size: 16px;
+  --large-padding: 12px;
+  --medium-block-size: 36px;
+  --medium-min-inline-size: 60px;
+  --medium-font-size: 14px;
+  --medium-padding: 8px;
+  --small-block-size: 32px;
+  --small-min-inline-size: 48px;
+  --small-font-size: 12px;
+  --small-padding: 7px 8px;
+
+  /* default setting */
+  --button-block-size: var(--medium-block-size);
+  --button-min-inline-size: var(--medium-min-inline-size);
+  --button-font-size: var(--medium-font-size);
+  --button-padding: var(--medium-padding);
+  --button-opacity: 1;
+  --button-border-size: 1px;
+
+  inline-size: fit-content;
+
+  /* button */
+  ::slotted([slot="button"]) {
+    --NORMAL: var(--ON);
+    --DISABLED: var(--OFF);
+    --HOVER: var(--OFF);
+    --ACTIVE: var(--OFF);
+
+    min-inline-size: var(--button-min-inline-size);
+    block-size: var(--button-block-size);
+
+    font-size: var(--button-font-size) !important;
+    border: var(--button-border-size) solid transparent;
+    color:
+      var(--NORMAL, var(--text-color-normal))
+      var(--DISABLED, var(--text-color-disabled))
+      var(--HOVER, var(--text-color-hover))
+      var(--ACTIVE, var(--text-color-active))
+    ;
+    background-color:
+      var(--NORMAL, var(--background-color-normal))
+      var(--DISABLED, var(--background-color-disabled))
+      var(--HOVER, var(--background-color-hover))
+      var(--ACTIVE, var(--background-color-active))
+    ;
+    border-color:
+      var(--NORMAL, var(--border-color-normal))
+      var(--DISABLED, var(--border-color-disabled))
+      var(--HOVER, var(--border-color-hover))
+      var(--ACTIVE, var(--border-color-active))
+    ;
+    opacity: var(--button-opacity);
+
+    padding: var(--button-padding);
+    border-radius: var(--button-block-size);
+
+    transition:
+      color .15s ease,
+      border-color .15s ease,
+      background-color .15s ease,
+      opacity .15s ease
+    ;
+  }
+
+  ::slotted([slot="button"]:focus-visible) {
+    --NORMAL: var(--OFF);
+    --DISABLED: var(--OFF);
+    --HOVER: var(--ON);
+    --ACTIVE: var(--OFF);
+  }
+
+  @media (hover: hover) {
+    ::slotted([slot="button"]:hover) {
+      --NORMAL: var(--OFF);
+      --DISABLED: var(--OFF);
+      --HOVER: var(--ON);
+      --ACTIVE: var(--OFF);
+    }
+  }
+
+  ::slotted([slot="button"]:is([disabled],[inert])) {
+    --NORMAL: var(--OFF);
+    --DISABLED: var(--ON);
+    --HOVER: var(--OFF);
+    --ACTIVE: var(--OFF);
+
+    --button-opacity: .2;
+  }
+
+  ::slotted([slot="button"]:active) {
+    --NORMAL: var(--OFF);
+    --DISABLED: var(--OFF);
+    --HOVER: var(--OFF);
+    --ACTIVE: var(--ON);
+  }
+}
+</style>
+
+<div class="main" ontouchstart="">
+  <slot name="button"></slot>
+</div>
+`;
+
+/* style injection */
+const styleInjection = `
+uni-button-field [slot=button] {
+  outline: 0 none;
+  resize: none;
+  appearance: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[inert] uni-button-field [slot=button] {
+  --NORMAL: var(--OFF);
+  --DISABLED: var(--ON);
+  --HOVER: var(--OFF);
+  --ACTIVE: var(--OFF);
+
+  --button-opacity: .2;
+}
+`;
+
+const INJECT_KEY = Symbol.for('uni.button.field.ui.injected');
+const uiInit = () => {
+  if (window[INJECT_KEY]) {
+    return;
+  }
+
+  const sheet = new CSSStyleSheet();
+  sheet.replaceSync(styleInjection);
+  document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+
+  window[INJECT_KEY] = true;
+};
+uiInit();
+
+export class UniButtonField extends HTMLElement {
+  #data;
+  #nodes;
+  #config;
+
+  constructor(config) {
+    super();
+
+    // template
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    // data
+    this.#data = {
+      controller: '',
+    };
+
+    // nodes
+    this.#nodes = {};
+
+    // config
+    this.#config = {
+      ...defaults,
+      ...config // new UniButtonField(config)
+    };
+  }
+
+  async connectedCallback() {
+    const { config, error } = await _wcl.getWCConfig(this);
+
+    if (error) {
+      console.warn(`${_wcl.classToTagName(this.constructor.name)}: ${error}`);
+      this.remove();
+      return;
+    } else {
+      this.#config = {
+        ...this.#config,
+        ...config
+      };
+    }
+
+    // upgradeProperty
+    Object.keys(defaults).forEach((key) => this.#upgradeProperty(key));
+  }
+
+  disconnectedCallback() {
+    this.#data.controller.abort?.();
+  }
+
+  #format(attrName, oldValue, newValue) {
+    const hasValue = newValue !== null;
+
+    if (!hasValue) {
+      if (booleanAttrs.includes(attrName)) {
+        this.#config[attrName] = false;
+      } else {
+        this.#config[attrName] = defaults[attrName];
+      }
+    } else {
+      switch (attrName) {
+        case 'appearance': {
+          this.#config[attrName] = ['filled', 'outlined', 'text'].includes(newValue) ? newValue : defaults.appearance;
+          break;
+        }
+
+        case 'size': {
+          this.#config[attrName] = ['large', 'medium', 'small'].includes(newValue) ? newValue : defaults.size;
+          break;
+        }
+
+        case 'theme': {
+          this.#config[attrName] = ['main', 'moderate', 'inverse', 'success', 'danger'].includes(newValue) ? newValue : defaults.theme;
+          break;
+        }
+      }
+    }
+  }
+
+  attributeChangedCallback(attrName, oldValue, newValue) {
+    if (!UniButtonField.observedAttributes.includes(attrName)) {
+      return;
+    }
+
+    this.#format(attrName, oldValue, newValue);
+  }
+
+  static get observedAttributes() {
+    return Object.keys(defaults); // UniButtonField.observedAttributes
+  }
+
+  static get supportedEvents() {
+    return Object.keys(custumEvents).map(
+      (key) => {
+        return custumEvents[key];
+      }
+    );
+  }
+
+  #upgradeProperty(prop) {
+    let value;
+
+    if (UniButtonField.observedAttributes.includes(prop)) {
+      if (Object.prototype.hasOwnProperty.call(this, prop)) {
+        value = this[prop];
+        delete this[prop];
+      } else {
+        if (booleanAttrs.includes(prop)) {
+          value = (this.hasAttribute(prop) || this.#config[prop]) ? true : false;
+        } else if (objectAttrs.includes(prop)) {
+          value = this.hasAttribute(prop) ? this.getAttribute(prop) : JSON.stringify(this.#config[prop]);
+        } else {
+          value = this.hasAttribute(prop) ? this.getAttribute(prop) : this.#config[prop];
+        }
+      }
+
+      this[prop] = value;
+    }
+  }
+
+  set appearance(value) {
+    if (value) {
+      this.setAttribute('appearance', value);
+    } else {
+      this.removeAttribute('appearance');
+    }
+  }
+
+  get appearance() {
+    return this.#config.appearance;
+  }
+
+  set size(value) {
+    if (value) {
+      this.setAttribute('size', value);
+    } else {
+      this.removeAttribute('size');
+    }
+  }
+
+  get size() {
+    return this.#config.size;
+  }
+
+  set theme(value) {
+    if (value) {
+      this.setAttribute('theme', value);
+    } else {
+      this.removeAttribute('theme');
+    }
+  }
+
+  get theme() {
+    return this.#config.theme;
+  }
+
+  refresh() {
+    this.hidden = true;
+    this.offsetHeight;
+    this.hidden = false;
+  }
+}
+
+// define web component
+const S = _wcl.supports();
+const T = _wcl.classToTagName('UniButtonField');
+if (S.customElements && S.shadowDOM && S.template && !window.customElements.get(T)) {
+  window.customElements.define(_wcl.classToTagName('UniButtonField'), UniButtonField);
+}
