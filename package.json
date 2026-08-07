@@ -1,6 +1,6 @@
 {
   "name": "uni-button-field",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "<uni-button-field /> is an encapsulated Web Component built upon the foundation of the uniopen design language. Implementation is straightforward: simply slot a standard input element inside <uni-button-field />. The component instantly applies a user interface that aligns seamlessly with the uniopen design language guidelines. Furthermore, its visual styles can be dynamically adapted via native HTML attributes or JavaScript properties.",
   "keywords": [
     "web"
