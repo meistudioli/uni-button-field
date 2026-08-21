@@ -564,7 +564,9 @@ ${_uniColorPalette}
   --button-opacity: 1;
   --button-border-size: 1px;
 
+  /*
   inline-size: fit-content;
+  */
 
   /* button */
   ::slotted([slot="button"]) {
